@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  naming-server:
+    build: ../naming-server/.
+    restart: always
+    ports:
+      - "8761:8761"
+  redis:
+    image: "redis:alpine"
+    restart: always
+    volumes:
+      - ../data/redis:/data
+# Hiding it from outside world - only available from docker
+#    ports:
+#      - "6379:6379"
+  gateway-service:
+    build: ../gateway-service/.
+    restart: always
+    ports:
+      - "8000:8080"
+  storage-service:
+    build: ../storage-service/.
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 3
